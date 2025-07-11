@@ -1,10 +1,13 @@
 'use client'
 
+import { useState } from 'react'
+
 import {
   BoldIcon,
   ChevronDownIcon,
   HighlighterIcon,
   ItalicIcon,
+  Link2Icon,
   ListTodoIcon,
   LucideIcon,
   MessageSquarePlusIcon,
@@ -17,15 +20,58 @@ import {
 } from 'lucide-react'
 import { type ColorResult, SketchPicker } from 'react-color'
 
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { useEditorStore } from '@/store/use-editor-store'
+
+const LinkButton = () => {
+  const { editor } = useEditorStore()
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState('')
+
+  const onChange = (href: string) => {
+    if (!href.trim()) return
+    editor?.chain().focus().extendMarkRange('link').setLink({ href }).run()
+    setValue('')
+    setOpen(false)
+  }
+
+  return (
+    <DropdownMenu
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open)
+        if (open) setValue(editor?.getAttributes('link').href || '')
+      }}
+    >
+      <DropdownMenuTrigger asChild>
+        <button className="flex h-7 min-w-7 shrink-0 items-center justify-between overflow-hidden rounded-sm px-1.5 text-sm hover:bg-neutral-200">
+          <Link2Icon className="size-4" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className="flex items-center gap-x-2 p-2.5">
+        <Input
+          type="url"
+          placeholder="https://example.com"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <Button disabled={!value.trim()} onClick={() => onChange}>
+          Apply
+        </Button>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 
 const HighlightColorButton = () => {
   const { editor } = useEditorStore()
@@ -323,7 +369,7 @@ export const Toolbar = () => {
 
       <TextColorButton />
       <HighlightColorButton />
-      {/* TODO: Link */}
+      <LinkButton />
       {/* TODO: Image */}
       {/* TODO: Align */}
       {/* TODO: Line height */}

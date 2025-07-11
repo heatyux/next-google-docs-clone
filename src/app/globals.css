@@ -123,6 +123,11 @@
 
 /* Tiptap editor */
 .tiptap {
+  /* Link styles */
+  a {
+    @apply cursor-pointer text-blue-600 hover:underline;
+  }
+
   /* List styles */
   ul,
   ol {
