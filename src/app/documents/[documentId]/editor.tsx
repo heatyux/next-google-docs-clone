@@ -7,11 +7,16 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
+import Underline from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import ImageResize from 'tiptap-extension-resize-image'
 
+import { useEditorStore } from '@/store/use-editor-store'
+
 export const Editor = () => {
+  const { setEditor } = useEditorStore()
+
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -30,9 +35,34 @@ export const Editor = () => {
       TableCell,
       TaskList,
       TaskItem.configure({ nested: true }),
+      Underline,
     ],
     content: '<h1>Hello World!</h1>',
     immediatelyRender: false,
+    onCreate: ({ editor }) => {
+      setEditor(editor)
+    },
+    onUpdate: ({ editor }) => {
+      setEditor(editor)
+    },
+    onSelectionUpdate: ({ editor }) => {
+      setEditor(editor)
+    },
+    onTransaction: ({ editor }) => {
+      setEditor(editor)
+    },
+    onFocus: ({ editor }) => {
+      setEditor(editor)
+    },
+    onBlur: ({ editor }) => {
+      setEditor(editor)
+    },
+    onContentError: ({ editor }) => {
+      setEditor(editor)
+    },
+    onDestroy: () => {
+      setEditor(null)
+    },
   })
 
   return (
