@@ -220,6 +220,7 @@ export const Navbar = () => {
                         <MenubarShortcut>⌘S</MenubarShortcut>
                       </MenubarItem>
                       <MenubarItem
+                        disabled={!editor?.can().unsetAllMarks()}
                         onClick={() => editor?.commands.unsetAllMarks()}
                       >
                         <RemoveFormattingIcon className="mr-2 size-4" /> Clear
