@@ -78,13 +78,10 @@ export const Ruler = () => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
-      className="relative flex h-6 items-end border-b border-gray-300 select-none print:hidden"
+      className="relative mx-auto flex h-6 items-end border-b border-gray-300 select-none print:hidden"
+      style={{ maxWidth: `${editorWidth}px` }}
     >
-      <div
-        id="ruler-container"
-        className="relative mx-auto size-full"
-        style={{ maxWidth: `${editorWidth}px` }}
-      >
+      <div id="ruler-container" className="relativesize-full">
         <Maker
           position={leftMargin}
           isLeft
