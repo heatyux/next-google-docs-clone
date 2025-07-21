@@ -18,9 +18,12 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import ImageResize from 'tiptap-extension-resize-image'
 
+import { editorMargin, editorWidth } from '@/config/editor'
 import { FontSizeExtension } from '@/extensions/font-size'
 import { LineHeightExtension } from '@/extensions/line-height'
 import { useEditorStore } from '@/store/use-editor-store'
+
+import { Ruler } from './ruler'
 
 export const Editor = () => {
   const { setEditor } = useEditorStore()
@@ -28,7 +31,7 @@ export const Editor = () => {
   const editor = useEditor({
     editorProps: {
       attributes: {
-        style: 'padding-left: 56px; padding-right: 56px;',
+        style: `width: ${editorWidth}px; padding-left: ${editorMargin}px; padding-right: ${editorMargin}px;`,
         class:
           'focus:outline-none bg-white border border-[#c7c7c7] flex flex-col min-h-[1054px] w-[816px] py-10 pr-14 cursor-text print:border-0',
       },
@@ -90,7 +93,12 @@ export const Editor = () => {
 
   return (
     <div className="oveflow-x-auto size-full bg-[#f9fbfd] px-4 print:overflow-visible print:bg-white print:p-0">
-      <div className="mx-auto flex w-[816px] min-w-max justify-center py-4 print:w-full print:min-w-0 print:py-0">
+      <Ruler />
+
+      <div
+        className="mx-auto flex min-w-max justify-center py-4 print:w-full print:min-w-0 print:py-0"
+        style={{ width: `${editorWidth}px` }}
+      >
         <EditorContent editor={editor} />
       </div>
     </div>
