@@ -1,7 +1,14 @@
+'use client'
+
+import { useQuery } from 'convex/react'
+
+import { api } from '../../../convex/_generated/api'
 import { Navbar } from './navbar'
 import { TemplateGallery } from './template-gallery'
 
 const HomePage = () => {
+  const documents = useQuery(api.documents.get)
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="fixed inset-x-0 top-0 z-10 h-16 bg-white p-4">
@@ -9,6 +16,9 @@ const HomePage = () => {
       </div>
       <div className="mt-16">
         <TemplateGallery />
+        {documents?.map((document) => (
+          <span key={document._id}>{document.title}</span>
+        ))}
       </div>
     </div>
   )
