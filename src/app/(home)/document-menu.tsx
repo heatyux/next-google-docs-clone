@@ -1,6 +1,12 @@
-import { ExternalLinkIcon, MoreVerticalIcon, Trash2Icon } from 'lucide-react'
+import {
+  ExternalLinkIcon,
+  FilePenIcon,
+  MoreVerticalIcon,
+  Trash2Icon,
+} from 'lucide-react'
 
 import { RemoveDialog } from '@/components/remove-dialog'
+import { RenameDialog } from '@/components/rename-dialog'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -14,19 +20,38 @@ import type { Id } from '../../../convex/_generated/dataModel'
 type DocumentMenuProps = {
   documentId: Id<'documents'>
   title: string
-  onNewTab: (id: Id<'documents'>) => void
+  onNewTab: () => void
 }
 
-export const DocumentMenu = ({ documentId, onNewTab }: DocumentMenuProps) => {
+export const DocumentMenu = ({
+  documentId,
+  title,
+  onNewTab,
+}: DocumentMenuProps) => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+          onClick={(e) => e.stopPropagation()}
+        >
           <MoreVerticalIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
+        <RenameDialog documentId={documentId} initialTitle={title}>
+          <DropdownMenuItem
+            onSelect={(e) => e.preventDefault()}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <FilePenIcon className="size-4" />
+            Rename
+          </DropdownMenuItem>
+        </RenameDialog>
+
         <RemoveDialog documentId={documentId}>
           <DropdownMenuItem
             onSelect={(e) => e.preventDefault()}
@@ -37,7 +62,12 @@ export const DocumentMenu = ({ documentId, onNewTab }: DocumentMenuProps) => {
           </DropdownMenuItem>
         </RemoveDialog>
 
-        <DropdownMenuItem onClick={() => onNewTab(documentId)}>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation()
+            onNewTab()
+          }}
+        >
           <ExternalLinkIcon className="size-4" /> Open in a new tab
         </DropdownMenuItem>
       </DropdownMenuContent>
