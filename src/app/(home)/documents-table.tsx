@@ -1,6 +1,7 @@
 import type { PaginationStatus } from 'convex/react'
 
 import { FullscreenLoader } from '@/components/fullscreen-loader'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -19,7 +20,11 @@ type DocumentsTableProps = {
   loadMore: (numItems: number) => void
 }
 
-export const DocumentsTable = ({ documents }: DocumentsTableProps) => {
+export const DocumentsTable = ({
+  documents,
+  status,
+  loadMore,
+}: DocumentsTableProps) => {
   return (
     <div className="mx-auto flex max-w-screen-xl flex-col gap-5 px-16 py-6">
       {documents === undefined ? (
@@ -54,6 +59,19 @@ export const DocumentsTable = ({ documents }: DocumentsTableProps) => {
           )}
         </Table>
       )}
+
+      <div className="flex items-center justify-center">
+        <Button
+          disabled={status === 'LoadingMore' || status !== 'CanLoadMore'}
+          variant="ghost"
+          size="sm"
+          onClick={() => loadMore(5)}
+        >
+          {status === 'LoadingMore' || status === 'CanLoadMore'
+            ? 'Load more'
+            : 'End of results'}
+        </Button>
+      </div>
     </div>
   )
 }
