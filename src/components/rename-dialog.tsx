@@ -3,6 +3,8 @@
 import React, { PropsWithChildren, useState } from 'react'
 
 import { useMutation } from 'convex/react'
+import { ConvexError } from 'convex/values'
+import { toast } from 'sonner'
 
 import {
   Dialog,
@@ -42,6 +44,13 @@ export const RenameDialog = ({
     setOpen(false)
     update({ id: documentId, title })
       .then(() => setOpen(false))
+      .catch((error) => {
+        console.log({ error })
+        const errorMessage =
+          error instanceof ConvexError ? error.data : 'Something went wrong!'
+
+        toast.error(errorMessage)
+      })
       .finally(() => {
         setIsUpdating(false)
       })

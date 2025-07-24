@@ -3,7 +3,9 @@
 import { useState } from 'react'
 
 import { useMutation } from 'convex/react'
+import { ConvexError } from 'convex/values'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 import {
   Carousel,
@@ -28,6 +30,11 @@ export const TemplateGallery = () => {
     create({ title, initialContent })
       .then((documentId) => {
         router.push(`/documents/${documentId}`)
+      })
+      .catch((error) => {
+        const errorMessage =
+          error instanceof ConvexError ? error.data : 'Something went wrong!'
+        toast.error(errorMessage)
       })
       .finally(() => {
         setIsCreating(false)

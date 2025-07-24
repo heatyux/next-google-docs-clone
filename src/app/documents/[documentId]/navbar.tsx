@@ -1,5 +1,6 @@
 'use client'
 
+import { OrganizationSwitcher, UserButton } from '@clerk/nextjs'
 import {
   BoldIcon,
   FileIcon,
@@ -87,7 +88,7 @@ export const Navbar = () => {
   }
 
   return (
-    <div className="flex items-center justify-between">
+    <nav className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         <Link href="/">
           <Image src="/logo.svg" alt="Docs logo" width={36} height={36} />
@@ -234,6 +235,16 @@ export const Navbar = () => {
           </div>
         </div>
       </div>
-    </div>
+
+      <div className="flex items-center gap-3 pl-6">
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl="/"
+          afterLeaveOrganizationUrl="/"
+          afterSelectOrganizationUrl="/"
+          afterSelectPersonalUrl="/"
+        />
+        <UserButton />
+      </div>
+    </nav>
   )
 }
