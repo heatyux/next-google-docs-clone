@@ -27,51 +27,55 @@ export const DocumentsTable = ({
 }: DocumentsTableProps) => {
   return (
     <div className="mx-auto flex max-w-screen-xl flex-col gap-5 px-16 py-6">
-      {documents === undefined ? (
+      {documents === undefined || status === 'LoadingFirstPage' ? (
         <FullscreenLoader className="h-24 min-h-full" />
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow className="border-none hover:bg-transparent">
-              <TableHead>Name</TableHead>
-              <TableHead>&nbsp;</TableHead>
-              <TableHead className="hidden md:table-cell">Shared</TableHead>
-              <TableHead className="hidden md:table-cell">Created</TableHead>
-            </TableRow>
-          </TableHeader>
-          {documents.length === 0 ? (
-            <TableBody>
+        <>
+          <Table>
+            <TableHeader>
               <TableRow className="border-none hover:bg-transparent">
-                <TableCell
-                  colSpan={4}
-                  className="text-muted-foreground h-24 text-center"
-                >
-                  No documents found.
-                </TableCell>
+                <TableHead>Name</TableHead>
+                <TableHead>&nbsp;</TableHead>
+                <TableHead className="hidden md:table-cell">Shared</TableHead>
+                <TableHead className="hidden md:table-cell">Created</TableHead>
               </TableRow>
-            </TableBody>
-          ) : (
-            <TableBody>
-              {documents.map((document) => (
-                <DocumentRow key={document._id} document={document} />
-              ))}
-            </TableBody>
-          )}
-        </Table>
-      )}
+            </TableHeader>
+            {documents.length === 0 ? (
+              <TableBody>
+                <TableRow className="border-none hover:bg-transparent">
+                  <TableCell
+                    colSpan={4}
+                    className="text-muted-foreground h-24 text-center"
+                  >
+                    No documents found.
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ) : (
+              <TableBody>
+                {documents.map((document) => (
+                  <DocumentRow key={document._id} document={document} />
+                ))}
+              </TableBody>
+            )}
+          </Table>
 
-      <div className="flex items-center justify-center">
-        <Button
-          disabled={status === 'LoadingMore' || status !== 'CanLoadMore'}
-          variant="ghost"
-          size="sm"
-          onClick={() => loadMore(5)}
-        >
-          {status === 'LoadingMore' || status === 'CanLoadMore'
-            ? 'Load more'
-            : 'End of results'}
-        </Button>
-      </div>
+          {documents.length > 0 && (
+            <div className="flex items-center justify-center">
+              <Button
+                disabled={status === 'LoadingMore' || status !== 'CanLoadMore'}
+                variant="ghost"
+                size="sm"
+                onClick={() => loadMore(5)}
+              >
+                {status === 'LoadingMore' || status === 'CanLoadMore'
+                  ? 'Load more'
+                  : 'End of results'}
+              </Button>
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }
