@@ -12,7 +12,7 @@ const liveblocks = new Liveblocks({
 })
 
 export async function POST(request: NextRequest) {
-  const { sessionClaims } = await auth()
+  const { sessionClaims, orgId } = await auth()
   const user = await currentUser()
 
   if (!sessionClaims || !user) {
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
   const isOwner = document.ownerId === user.id
   const isOrganizationMember = !!(
-    document.organizationId && document.organizationId === sessionClaims.org_id
+    document.organizationId && document.organizationId === orgId
   )
 
   if (!isOwner && !isOrganizationMember) {
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
   const session = liveblocks.prepareSession(user.id, {
     userInfo: {
       name:
-        user.fullName ?? user.emailAddresses?.[0].emailAddress ?? 'Anonymous',
+        user.fullName ?? user.primaryEmailAddress?.emailAddress ?? 'Anonymous',
       avatar: user.imageUrl,
     },
   })
