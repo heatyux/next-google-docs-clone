@@ -1,6 +1,7 @@
 'use client'
 
 import { useLiveblocksExtension } from '@liveblocks/react-tiptap'
+import { useStorage } from '@liveblocks/react/suspense'
 import Color from '@tiptap/extension-color'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
@@ -31,10 +32,13 @@ export const Editor = () => {
   const liveblocks = useLiveblocksExtension()
   const { setEditor } = useEditorStore()
 
+  const leftMargin = useStorage((root) => root.leftMargin)
+  const rightMargin = useStorage((root) => root.rightMargin)
+
   const editor = useEditor({
     editorProps: {
       attributes: {
-        style: `width: ${editorWidth}px; padding-left: ${editorMargin}px; padding-right: ${editorMargin}px;`,
+        style: `width: ${editorWidth}px; padding-left: ${leftMargin ?? editorMargin}px; padding-right: ${rightMargin ?? editorMargin}px;`,
         class:
           'focus:outline-none bg-white border border-[#c7c7c7] flex flex-col min-h-[1054px] w-[816px] py-10 pr-14 cursor-text print:border-0',
       },

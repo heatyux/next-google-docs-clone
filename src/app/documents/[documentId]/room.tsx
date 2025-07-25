@@ -10,6 +10,7 @@ import {
 import { toast } from 'sonner'
 
 import { FullscreenLoader } from '@/components/fullscreen-loader'
+import { editorMargin } from '@/config/editor'
 
 import { getUsers } from './actions'
 
@@ -77,7 +78,13 @@ export function Room({ children, roomId }: RoomProps) {
       }}
       resolveRoomsInfo={() => []}
     >
-      <RoomProvider id={roomId}>
+      <RoomProvider
+        id={roomId}
+        initialStorage={{
+          leftMargin: editorMargin,
+          rightMargin: editorMargin,
+        }}
+      >
         <ClientSideSuspense
           fallback={<FullscreenLoader label="Loading Document..." />}
         >
