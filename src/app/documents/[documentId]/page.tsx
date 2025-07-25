@@ -11,7 +11,7 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
   const { documentId } = await params
 
   return (
-    <Room documentId={documentId}>
+    <Room roomId={documentId}>
       <div className="min-h-screen bg-[#fafbfd]">
         <div className="fixed inset-x-0 top-0 z-10 flex flex-col gap-y-2 bg-[#FAFBFD] px-4 pt-2 print:hidden">
           <Navbar />

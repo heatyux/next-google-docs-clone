@@ -15,7 +15,7 @@ import { getUsers } from './actions'
 
 type RoomProps = {
   children: ReactNode
-  documentId: string
+  roomId: string
 }
 
 type User = {
@@ -24,7 +24,7 @@ type User = {
   avatar: string
 }
 
-export function Room({ children, documentId }: RoomProps) {
+export function Room({ children, roomId }: RoomProps) {
   const [users, setUsers] = useState<User[]>([])
 
   const fetchUsers = useMemo(
@@ -48,7 +48,17 @@ export function Room({ children, documentId }: RoomProps) {
   return (
     <LiveblocksProvider
       throttle={16}
-      authEndpoint="/api/liveblocks-auth"
+      authEndpoint={async () => {
+        const endpoint = '/api/liveblocks-auth'
+        const room = roomId
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          body: JSON.stringify({ room }),
+        })
+
+        return await response.json()
+      }}
       resolveUsers={({ userIds }) => {
         return userIds.map(
           (userId) => users.find((user) => user.id === userId) ?? undefined,
@@ -67,7 +77,7 @@ export function Room({ children, documentId }: RoomProps) {
       }}
       resolveRoomsInfo={() => []}
     >
-      <RoomProvider id={documentId}>
+      <RoomProvider id={roomId}>
         <ClientSideSuspense
           fallback={<FullscreenLoader label="Loading Document..." />}
         >
