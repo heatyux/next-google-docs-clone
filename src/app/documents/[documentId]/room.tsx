@@ -15,9 +15,7 @@ type RoomProps = {
 
 export function Room({ children, documentId }: RoomProps) {
   return (
-    <LiveblocksProvider
-      publicApiKey={process.env.NEXT_PUBLIC_LIVEBLOCKS_API_KEY}
-    >
+    <LiveblocksProvider authEndpoint="/api/liveblocks-auth" throttle={16}>
       <RoomProvider id={documentId}>
         <ClientSideSuspense fallback={<div>Loading…</div>}>
           {children}
