@@ -31,7 +31,7 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
         </Unauthenticated>
 
         <AuthLoading>
-          <FullscreenLoader />
+          <FullscreenLoader label="Room loading..." />
         </AuthLoading>
       </ConvexProviderWithClerk>
     </ClerkProvider>

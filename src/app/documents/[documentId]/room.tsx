@@ -86,7 +86,7 @@ export function Room({ children, roomId }: RoomProps) {
         }}
       >
         <ClientSideSuspense
-          fallback={<FullscreenLoader label="Loading Document..." />}
+          fallback={<FullscreenLoader label="Document loading..." />}
         >
           {children}
         </ClientSideSuspense>
