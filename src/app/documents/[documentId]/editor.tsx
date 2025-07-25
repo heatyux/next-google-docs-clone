@@ -1,5 +1,6 @@
 'use client'
 
+import { useLiveblocksExtension } from '@liveblocks/react-tiptap'
 import Color from '@tiptap/extension-color'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
@@ -24,8 +25,10 @@ import { LineHeightExtension } from '@/extensions/line-height'
 import { useEditorStore } from '@/store/use-editor-store'
 
 import { Ruler } from './ruler'
+import { Threads } from './threads'
 
 export const Editor = () => {
+  const liveblocks = useLiveblocksExtension()
   const { setEditor } = useEditorStore()
 
   const editor = useEditor({
@@ -43,13 +46,16 @@ export const Editor = () => {
       Highlight.configure({ multicolor: true }),
       Image,
       ImageResize,
+      liveblocks,
       LineHeightExtension,
       Link.configure({
         openOnClick: false,
         autolink: true,
         defaultProtocol: 'https',
       }),
-      StarterKit,
+      StarterKit.configure({
+        history: false,
+      }),
       Table.configure({ resizable: true }),
       TableRow,
       TableHeader,
@@ -100,6 +106,7 @@ export const Editor = () => {
         style={{ width: `${editorWidth}px` }}
       >
         <EditorContent editor={editor} />
+        <Threads editor={editor} />
       </div>
     </div>
   )
