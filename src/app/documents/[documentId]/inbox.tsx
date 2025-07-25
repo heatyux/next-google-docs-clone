@@ -10,10 +10,21 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Separator } from '@/components/ui/separator'
 
 export const Inbox = () => {
   return (
-    <ClientSideSuspense fallback={null}>
+    <ClientSideSuspense
+      fallback={
+        <>
+          <Button variant="ghost" className="relative" size="icon">
+            <BellIcon className="size-5" />
+          </Button>
+
+          <Separator orientation="vertical" className="h-6" />
+        </>
+      }
+    >
       <InboxMenu />
     </ClientSideSuspense>
   )
