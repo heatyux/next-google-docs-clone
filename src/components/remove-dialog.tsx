@@ -4,6 +4,7 @@ import { type PropsWithChildren, useState } from 'react'
 
 import { useMutation } from 'convex/react'
 import { ConvexError } from 'convex/values'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 import {
@@ -29,6 +30,7 @@ export const RemoveDialog = ({
   children,
   documentId,
 }: PropsWithChildren<RemoveDialogProps>) => {
+  const router = useRouter()
   const remove = useMutation(api.documents.removeById)
   const [isRemoving, setIsRemoving] = useState(false)
 
@@ -57,6 +59,9 @@ export const RemoveDialog = ({
               setIsRemoving(true)
 
               remove({ id: documentId })
+                .then(() => {
+                  router.push('/')
+                })
                 .catch((error) => {
                   const errorMessage =
                     error instanceof ConvexError

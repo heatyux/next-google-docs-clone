@@ -1,6 +1,8 @@
 'use client'
 
 import { OrganizationSwitcher, UserButton } from '@clerk/nextjs'
+import { useMutation } from 'convex/react'
+import { ConvexError } from 'convex/values'
 import {
   BoldIcon,
   FileIcon,
@@ -21,8 +23,12 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { BsFilePdf } from 'react-icons/bs'
+import { toast } from 'sonner'
 
+import { RemoveDialog } from '@/components/remove-dialog'
+import { RenameDialog } from '@/components/rename-dialog'
 import {
   Menubar,
   MenubarContent,
@@ -37,6 +43,7 @@ import {
 } from '@/components/ui/menubar'
 import { useEditorStore } from '@/store/use-editor-store'
 
+import { api } from '../../../../convex/_generated/api'
 import { Doc } from '../../../../convex/_generated/dataModel'
 import { Avatars } from './avatars'
 import { DocumentInput } from './document-input'
@@ -47,7 +54,10 @@ type NavbarProps = {
 }
 
 export const Navbar = ({ data }: NavbarProps) => {
+  const router = useRouter()
   const { editor } = useEditorStore()
+
+  const mutate = useMutation(api.documents.create)
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
     editor?.commands.insertTable({ rows, cols, withHeaderRow: false })
@@ -94,6 +104,21 @@ export const Navbar = ({ data }: NavbarProps) => {
     onDownload(blob, `${data.title}.txt`)
   }
 
+  const onNewDocument = () => {
+    mutate({
+      title: 'Untitled document',
+      initialContent: '',
+    })
+      .then((id) => {
+        router.push(`/documents/${id}`)
+      })
+      .catch((error) => {
+        const errorMessage =
+          error instanceof ConvexError ? error.data : 'Something went wrong!'
+        toast.error(errorMessage)
+      })
+  }
+
   return (
     <nav className="flex items-center justify-between">
       <div className="flex items-center gap-2">
@@ -129,16 +154,26 @@ export const Navbar = ({ data }: NavbarProps) => {
                       </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
-                  <MenubarItem>
+                  <MenubarItem onClick={onNewDocument}>
                     <FilePlusIcon className="mr-2 size-4" /> New Document
                   </MenubarItem>
                   <MenubarSeparator />
-                  <MenubarItem>
-                    <FilePenIcon className="mr-2 size-4" /> Rename
-                  </MenubarItem>
-                  <MenubarItem>
-                    <Trash2Icon className="mr-2 size-4" /> Remove
-                  </MenubarItem>
+                  <RenameDialog documentId={data._id} initialTitle={data.title}>
+                    <MenubarItem
+                      onClick={(e) => e.stopPropagation()}
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <FilePenIcon className="mr-2 size-4" /> Rename
+                    </MenubarItem>
+                  </RenameDialog>
+                  <RemoveDialog documentId={data._id}>
+                    <MenubarItem
+                      onClick={(e) => e.stopPropagation()}
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <Trash2Icon className="mr-2 size-4" /> Remove
+                    </MenubarItem>
+                  </RemoveDialog>
                   <MenubarSeparator />
                   <MenubarItem onClick={() => window.print()}>
                     <PrinterIcon className="mr-2 size-4" />
