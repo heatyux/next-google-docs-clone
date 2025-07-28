@@ -43,6 +43,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
   const rightMargin = useStorage((root) => root.rightMargin)
 
   const editor = useEditor({
+    autofocus: true,
     editorProps: {
       attributes: {
         style: `width: ${editorWidth}px; padding-left: ${leftMargin ?? editorMargin}px; padding-right: ${rightMargin ?? editorMargin}px;`,
