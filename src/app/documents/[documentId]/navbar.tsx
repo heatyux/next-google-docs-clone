@@ -126,7 +126,7 @@ export const Navbar = ({ data }: NavbarProps) => {
           <Image src="/logo.svg" alt="Docs logo" width={36} height={36} />
         </Link>
         <div className="flex flex-col">
-          <DocumentInput title={data.title} />
+          <DocumentInput title={data.title} id={data._id} />
 
           <div className="flex">
             <Menubar className="h-auto border-none bg-transparent p-0 shadow-none">
