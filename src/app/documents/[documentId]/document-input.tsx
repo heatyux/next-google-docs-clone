@@ -1,9 +1,11 @@
-export const DocumentInput = () => {
+type DocumentInputProps = {
+  title: string
+}
+
+export const DocumentInput = ({ title }: DocumentInputProps) => {
   return (
     <div className="flex items-center gap-2">
-      <span className="cursor-pointer truncate px-1.5 text-lg">
-        Untitled Document
-      </span>
+      <span className="cursor-pointer truncate px-1.5 text-lg">{title}</span>
     </div>
   )
 }
